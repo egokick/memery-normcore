@@ -40,4 +40,4 @@ if __name__ == "__main__":
         install_poetry()    
 
     # check if cuda is installed
-    # cuda_check("11.3.0")
+    cuda_check("11.3.0")

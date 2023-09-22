@@ -54,7 +54,7 @@ def check_and_install_cuda(required_cuda_version: str):
     print(f"\033[91mDetected CUDA {installed_cuda_version}, requires {required_cuda_version} for gpu.\033[0m")
 
     # Collect user input
-    user_input = input("\033[94mUsing cpu mode by default. Install CUDA version for gpu mode? [y/N]: \033[0m\n\n")
+    user_input = input("\033[94mCompatible GPU detected. Install CUDA version for gpu mode? [y/N]: \033[0m\n\n")
 
     if user_input.lower() == 'y':
         return download_and_install_cuda(required_cuda_version)
