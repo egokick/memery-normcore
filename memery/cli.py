@@ -5,13 +5,10 @@ import streamlit.cli
 from typing import Optional
 # Sometimes you just want to be able to pipe information through the terminal. This is that command
 
-from .cuda_install import cuda_check
 
 app = typer.Typer()
 
-def main():
-    # Cuda dependency install/check
-    cuda_check("11.3.0")
+def main():    
     app()
 
 @app.command()
