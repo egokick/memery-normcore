@@ -1,1 +1,1 @@
-memery-normcore serve
+memery serve
