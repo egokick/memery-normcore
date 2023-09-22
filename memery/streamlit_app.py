@@ -66,7 +66,7 @@ skipped_files_box = st.sidebar.expander(label='Skipped files', expanded=False)
 sizes = {'small': 115, 'medium':230, 'large':332, 'xlarge':600}
 l, m, r = st.columns([4,1,1])
 with l:
-    num_images = st.slider(label='Number of images',value=12)
+    num_images = st.slider(label='Number of images', min_value=1, max_value=500, value=12)
 
 with m:
     size_choice = st.selectbox(label='Image width', options=[k for k in sizes.keys()], index=1)
