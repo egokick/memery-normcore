@@ -32,6 +32,10 @@ Outline:
   - Who works on this project
 
 ## Installation
+### Quickstart-Windows
+- Run the `windows-install.bat` file
+- Run the `windows-run.bat` file
+
 
 With Python 3.9 or greater:
 
