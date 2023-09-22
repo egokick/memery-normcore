@@ -22,7 +22,8 @@ class Memery():
         self.db = None
         self.model = None
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        
+        print(f"Using {self.device} for computation.")
+
     def index_flow(self, root: str, num_workers=0) -> tuple[str, str]:
         '''Indexes images in path, returns the location of save files'''
 
