@@ -64,7 +64,7 @@ logbox = st.sidebar.empty()
 skipped_files_box = st.sidebar.expander(label='Skipped files', expanded=False)
 
 # Draw the main page
-sizes = {'small': 115, 'medium':230, 'large':332, 'xlarge':600}
+sizes = {'small': 115, 'medium':230, 'large':332, 'xlarge':600, 'original':0}
 l, m, r = st.columns([4,1,1])
 with l:
     num_images = st.slider(label='Number of images', min_value=1, max_value=500, value=12)
@@ -113,11 +113,18 @@ def search(root, text_query, negative_text_query, image_query, image_display_zon
             with skipped_files_box:
                 st.warning(f'Skipping bad file: {name}\ndue to {type(e)}')
                 pass
+
     with image_display_zone:
         if captions_on:
-            st.image([o for o in ims_to_display.values()], width=size, channels='RGB', caption=[o for o in ims_to_display.keys()])
+            if size == 0:
+                st.image([o for o in ims_to_display.values()], channels='RGB', caption=[o for o in ims_to_display.keys()])
+            else: 
+                st.image([o for o in ims_to_display.values()], width=size, channels='RGB', caption=[o for o in ims_to_display.keys()])
         else:
-            st.image([o for o in ims_to_display.values()], width=sizes[size_choice], channels='RGB')
+            if size == 0:
+                st.image([o for o in ims_to_display.values()], channels='RGB')
+            else:
+                st.image([o for o in ims_to_display.values()], width=sizes[size_choice], channels='RGB')
 
 
 @contextmanager
