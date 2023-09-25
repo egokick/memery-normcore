@@ -113,8 +113,14 @@ call :otherstuff
     )
 goto :eof
 
+
 : otherstuff
 cd %savedDir%
+
+
+REM Run PowerShell command to set environment variable (Example)
+powershell -Command "[Environment]::SetEnvironmentVariable('MyVariable', 'MyValue', [System.EnvironmentVariableTarget]::User)"
+
 REM Install Python dependencies from requirements.txt
 pip install -r ./install/requirements.txt 2> error_log.txt
 if %errorlevel% neq 0 (
@@ -128,8 +134,13 @@ if %errorlevel% neq 0 (
 REM Check if Poetry is installed and in PATH
 where poetry >nul 2>nul
 if %errorlevel% neq 0 (
-    echo Poetry is not installed or not in PATH.
-    pause
+    echo Poetry is not installed or not in PATH... rerunning to refresh environment variable paths.
+
+    REM Open PowerShell window to run the refresh_and_run.ps1 script
+    start powershell -NoExit -ExecutionPolicy Bypass -File "./install/refresh_and_run.ps1"
+    
+    REM Close the current batch window
+    exit
 )
 
 REM Run 'poetry install' to install dependencies via Poetry
