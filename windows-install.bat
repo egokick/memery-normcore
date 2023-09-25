@@ -1,6 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
 
+set savedDir=%CD%
+echo current working directory: %CD%
+
 :: Check if Python is installed and in PATH
 where python >nul 2>nul
 if !errorlevel! neq 0 (
@@ -45,8 +48,19 @@ goto InstallPython
 
 :InstallPython
 echo Installing Python 3.10.6...
-REM Download and installation logic here (internet access required, which is disabled in this session)
-echo Run the install script again after Python installation is complete.
+REM Note: Internet access is required for this part, and it's disabled in this session. Make sure you're connected.
+REM Check if Python installer already exists
+if not exist "%CD%\python-3.10.6-amd64.exe" (
+    REM Download Python 3.10.6 using curl.
+    curl -O https://www.python.org/ftp/python/3.10.6/python-3.10.6-amd64.exe
+)
+start /wait python-3.10.6-amd64.exe InstallAllUsers=1 PrependPath=1
+if %errorlevel% neq 0 (
+    echo Failed to install Python.
+    exit /b 1
+)
+echo Python has been installed, run the install script again.
+echo This will refresh the environment variables, ensure all other command windows are closed.
 pause
 goto End
 
@@ -100,10 +114,14 @@ call :otherstuff
 goto :eof
 
 : otherstuff
+cd %savedDir%
 REM Install Python dependencies from requirements.txt
-pip install -r ./install/requirements.txt
+pip install -r ./install/requirements.txt 2> error_log.txt
 if %errorlevel% neq 0 (
     echo Failed to install Python dependencies from requirements.txt.
+    echo Current Working Directory: %CD%
+    echo Error details:
+    type error_log.txt
     pause
 )
 
