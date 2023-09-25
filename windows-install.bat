@@ -1,5 +1,5 @@
 @echo off
-SETLOCAL
+setlocal enabledelayedexpansion
 
 REM Check if Python is installed and in PATH
 where python >nul 2>nul
@@ -62,13 +62,27 @@ pause
 
 :End
 ENDLOCAL
+ 
+REM Check path
 
-echo Upgrade pip
-python -m pip install --upgrade pip
-if %errorlevel% neq 0 (
-    echo Failed to upgrade pip
-    pause
-)
+
+:: Get the username dynamically
+for /f "tokens=3 delims=\" %%i in ("!USERPROFILE!") do set username=%%i
+
+:: Define the paths to be checked/added
+set "path1_to_check=C:\Users\!username!\AppData\Roaming\Python\Python310\Scripts"
+set "path2_to_check=C:\Program Files\Python310\Lib\site-packages"
+
+:: Check and add path1_to_check
+call :check_add_path "!path1_to_check!"
+
+:: Check and add path2_to_check
+call :check_add_path "!path2_to_check!"
+
+:: Your additional batch commands go here
+echo This is an additional command.
+
+
 
 REM Install Python dependencies from requirements.txt
 pip install -r ./install/requirements.txt
@@ -105,3 +119,29 @@ if %errorlevel% neq 0 (
 )
 echo Success Installed.
 pause
+
+
+:: Return to the original state
+endlocal
+goto :eof
+
+:: Function to check and add a given path to PATH
+:check_add_path
+    set "path_to_check=%~1"
+    set "path_copy=!PATH!"
+    set "path_copy=!path_copy:;=; !"
+    set "path_found=0"
+    for %%p in (!path_copy!) do (
+        if "%%~p"=="!path_to_check!" (
+            set "path_found=1"
+            goto function_end
+        )
+    )
+    :function_end
+    if "!path_found!"=="0" (
+        powershell.exe -command "[Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('PATH', [EnvironmentVariableTarget]::User) + ';!path_to_check!', [EnvironmentVariableTarget]::User)"
+        echo Added !path_to_check! to PATH.
+    ) else (
+        echo !path_to_check! is already in PATH.
+    )
+goto :eof

@@ -47,3 +47,6 @@ if exist poetry.lock del poetry.lock
 :end
 :: End of script
 endlocal
+
+echo uninstalled successfully 
+pause
